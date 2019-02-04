@@ -5,20 +5,23 @@
 # See documentation in:
 # http://doc.scrapy.org/en/latest/topics/items.html
 
-import scrapy
+from scrapy import Item, Field
 
 
-class LvegspiderItem(scrapy.Item):
+class LvegspiderItem(Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
 
-class ZnGirlItem(scrapy.Item):
-    name = scrapy.Field()
-    pic_url = scrapy.Field(serializer=list)
-    rate = scrapy.Field()
+class qqwzItem(Item):
+    # 用作网站千千网赚的文章
+    # content = Field()
+    # title = Field()
+    url = Field()
+    description = Field()
+    keywords = Field()
 
 
-class meizituItem(scrapy.Item):
-    url = scrapy.Field()
+class mashItem(Item):
+    url = Field()
 

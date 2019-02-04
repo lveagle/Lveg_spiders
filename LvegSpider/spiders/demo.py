@@ -12,7 +12,8 @@ from scrapy.utils.response import open_in_browser
 from scrapy.linkextractors import LinkExtractor
 from scrapy_redis.spiders import RedisSpider, RedisCrawlSpider
 from LvegSpider.utils.cookies import  *
-
+import random
+import os, os.path
 
 
 class User_agents_demo(scrapy.Spider):
@@ -70,11 +71,18 @@ class Ip_Proxy_demo(scrapy.Spider):
     """
 
     # 新的检测方式, 可以工作
-    start_urls = ['http://ip111.cn/' for i in range(10)]
+    # start_urls = ['http://ip111.cn/' for i in range(10)]
+    # def parse(self, response):
+    #     # self.logger.info(response.css('td')[4].css('td::text').extract_first().strip())
+    #     print(response.css('td')[4].css('td::text').extract_first().strip())
+    #     yield None
+
+    start_urls = ['http://httpbin.org/ip' for i in range(10)]
     def parse(self, response):
-        # self.logger.info(response.css('td')[4].css('td::text').extract_first().strip())
-        print(response.css('td')[4].css('td::text').extract_first().strip())
+        # print(response.css('td')[4].css('td::text').extract_first().strip())
+        print(response.text)
         yield None
+
 
 
 
@@ -154,4 +162,59 @@ class Signin_demo(scrapy.Spider):
         yield None
 
 
+# download mash
+class Mash(CrawlSpider):
+    name = "mash"
+    start_urls = [
+        # 'https://e-hentai.org/g/1277747/542e8e0f5b/',
+        # 'https://e-hentai.org/g/1276767/149280ee4b/',
+        # 'https://e-hentai.org/g/1276127/a3f26175f0/',
+        # 'https://e-hentai.org/g/1276104/f838914444/',
+        # 'https://e-hentai.org/g/1275525/647b708fae/',
+        # 'https://e-hentai.org/g/1275265/3ec4463207/',
+        # 'https://e-hentai.org/g/1274942/c154d4fd8d/',
+        # 'https://e-hentai.org/g/1274903/6810de738c/',
+        # 'https://e-hentai.org/g/1274404/f097c5de24/',
+        # 'https://e-hentai.org/g/1271271/ed11a5a076/',
+        # 'https://e-hentai.org/g/1271876/0dc613d698/',
+        # 'https://e-hentai.org/g/1273371/94c9b34fc0/',
+        # 'https://e-hentai.org/g/1269977/7e9f7ca0d7/',
+        'https://e-hentai.org/g/1048750/7f747e4243/',
+        'https://e-hentai.org/g/1022394/0645794bc9/',
+        'https://e-hentai.org/g/1279394/1e118e1db0/',
+        'https://e-hentai.org/g/1275211/c5828977e4/',
+        'https://e-hentai.org/g/1191085/3edebb39dd/',
+        'https://e-hentai.org/g/1104192/90920392dd/',
+    ]
+
+    custom_settings = {
+        'DOWNLOADER_MIDDLEWARES': {
+            "LvegSpider.middlewares.UserAgentMiddleware": 401,
+            'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+
+            'scrapy.downloadermiddlewares.retry.RetryMiddleware': 90,
+            'LvegSpider.middlewares.IProxyMiddleware': 100,
+            'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110,
+        },
+        # 'ITEM_PIPELINES': {
+        #     'LvegSpider.pipelines.mashPipeline': 310,
+        # },
+    }
+
+    rules = (
+        Rule(LinkExtractor(allow=(r'/?p=\d+', )), follow=True),
+        Rule(LinkExtractor(allow=(r'https://e-hentai.org/s', )), callback='parse_pic'),
+    )
+
+    def parse_pic(self, response):
+        url = response.css('img#img::attr(src)').extract_first()
+        # yield scrapy.Request(url, callback=self.download)
+        yield None
+    #
+    # def download(self, response):
+    #     if not os.path.exists('dnf_image'):
+    #         os.mkdir('dnf_image')
+    #     with open('dnf_image/{}.jpg'.format(random.random()), 'wb+') as fp:
+    #         fp.write(response.body)
+    #
 

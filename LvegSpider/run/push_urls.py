@@ -14,12 +14,17 @@ r = redis.StrictRedis(connection_pool=pool)
 
 # start urls for each website
 spiders_dict = {
-        "meizitu:start_urls":["http://www.meizitu.com/a/more_1.html"],
-        # "finance_ifeng:start_urls":['http://finance.ifeng.com/',
-        #                             'http://tech.ifeng.com/',
-        #                              'http://finance.ifeng.com/stock/gstzgc/'],
+        # "qqwz_1:start_urls": ['http://www.shangmeidd.com/page/1'],
+        # "qqwz_2:start_urls": ['http://www.fububu.com/catalog.asp?page=1'],
+        "qqwz_3:start_urls": [
+            'http://www.jiankeba.com/wangzhuanjingyan/',
+            'http://www.jiankeba.com/diaochazhuanqian/',
+            'http://www.jiankeba.com/zhucezhuanqian/',
+            'http://www.jiankeba.com/shoujizhuanqian/',
+            'http://www.jiankeba.com/youxizhuanqian/',
+            'http://www.jiankeba.com/touzizhuanqian/',
+                              ],
         }
-
 
 for key, start_urls in spiders_dict.items():
     for url in start_urls:
